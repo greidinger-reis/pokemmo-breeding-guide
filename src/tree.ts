@@ -27,7 +27,7 @@ export class BreedTreePosition {
 	constructor(
 		public row: number,
 		public col: number,
-	) { }
+	) {}
 
 	// If used on the first row (0,0) this will return an invalid position
 	public getPartnerPosition(): BreedTreePosition {
@@ -88,7 +88,7 @@ export class PokemonBreedTree {
 			generations,
 			natured ? lastRowBreeders.natured : lastRowBreeders.natureless,
 			finalPokemonNode,
-			finalPokemonIvMap
+			finalPokemonIvMap,
 		)
 	}
 
