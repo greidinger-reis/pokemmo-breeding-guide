@@ -1,0 +1,14 @@
+{
+  "name": "pokemmo-breeder-ts",
+  "module": "src/main.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ts-results": "^3.3.0"
+  }
+}
