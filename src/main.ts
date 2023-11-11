@@ -1,5 +1,6 @@
-import { Elysia } from "elysia"
-import { staticPlugin } from "@elysiajs/static"
+import { Elysia } from 'elysia'
+import { index } from './pages'
+import staticPlugin from '@elysiajs/static'
 
 await Bun.build({
 	entrypoints: ['src/components/index.ts'],
@@ -7,14 +8,9 @@ await Bun.build({
 	target: 'browser',
 })
 
-const app = new Elysia()
-
-app.use(staticPlugin({
-	assets: 'assets',
-	prefix: '/'
-}))
-
-app.get("/", () => Bun.file('index.html')).listen(3000, (ctx) => {
-	console.log('Server listenting on port: ' + ctx.port)
-})
-
+const app = new Elysia().use(
+	staticPlugin({
+		assets: 'assets',
+		prefix: '/',
+	}),
+).use(index).listen(3000, ({ port }) => console.log("Server running on port: " + port))
