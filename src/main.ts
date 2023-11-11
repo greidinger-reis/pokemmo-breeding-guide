@@ -1,14 +1,20 @@
-import { LitElement, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { Elysia } from "elysia"
+import { staticPlugin } from "@elysiajs/static"
 
-@customElement('my-element')
-class MyElement extends LitElement {
-	render() {
-		return html` <div>
-			<h1>Hello, World!</h1>
-			<p>This is my element</p>
-		</div>`
-	}
-}
+await Bun.build({
+	entrypoints: ['src/components/index.ts'],
+	outdir: 'assets',
+	target: 'browser',
+})
 
-console.log('Hello via Bun!')
+const app = new Elysia()
+
+app.use(staticPlugin({
+	assets: 'assets',
+	prefix: '/'
+}))
+
+app.get("/", () => Bun.file('index.html')).listen(3000, (ctx) => {
+	console.log('Server listenting on port: ' + ctx.port)
+})
+
