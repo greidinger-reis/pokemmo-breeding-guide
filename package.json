@@ -3,8 +3,7 @@
 	"module": "src/main.ts",
 	"type": "module",
 	"scripts": {
-		"dev": "concurrently \"bun --bun run src/main.ts\" \"bun run tailwind:dev\" \"bun run live-reload\"",
-		"live-reload": "bun ./src/lib/live-reload-server.ts",
+		"dev": "concurrently \"bun --hot run src/main.ts\" \"bun run tailwind:dev\"",
 		"tailwind": "bunx --bun tailwindcss -i ./src/views/styles/globals.css -o ./assets/styles.css",
 		"tailwind:dev": "bunx --bun tailwindcss -i ./src/styles/globals.css -o ./assets/styles.css --watch",
 		"typecheck": "bunx --bun tsc",
@@ -30,9 +29,9 @@
 	},
 	"dependencies": {
 		"@elysiajs/static": "^0.7.1",
-		"@lit-labs/ssr": "^3.1.9",
+		"@lit-labs/ssr": "latest",
 		"elysia": "^0.7.24",
-		"lit": "^3.0.2",
+		"lit": "latest",
 		"ts-results": "^3.3.0"
 	}
 }

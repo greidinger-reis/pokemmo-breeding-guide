@@ -8,7 +8,7 @@ export class MyElement extends LitElement {
 			<h1>Hello, World!</h1>
 			<p>This is my element</p>
 			<p>this is another p tag mofo!</p>
-			<p>Test live reload!</p>
+			<p>Test livereload</p>
 		</div>`
 	}
 }
