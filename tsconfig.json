@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "compilerOptions": {
     "lib": ["ESNext", "DOM"],
     "module": "esnext",
@@ -19,4 +20,29 @@
       "bun-types" // add Bun global
     ]
   }
+=======
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM"],
+		"module": "esnext",
+		"target": "esnext",
+		"moduleResolution": "bundler",
+		"moduleDetection": "force",
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		"composite": true,
+		"strict": true,
+		"downlevelIteration": true,
+		"skipLibCheck": true,
+		"jsx": "react-jsx",
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"experimentalDecorators": true,
+		"useDefineForClassFields": false,
+		"allowJs": true,
+		"types": [
+			"bun-types" // add Bun global
+		],
+		"plugins": [{ "name": "ts-lit-plugin" }]
+	}
+>>>>>>> 38f76809f110f0a7fbb88248f3363e3964488abd
 }
