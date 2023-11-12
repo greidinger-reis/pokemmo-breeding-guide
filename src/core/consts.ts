@@ -1,5 +1,5 @@
 import { Option, Some, None } from 'ts-results'
-import { PokemonBreederKind, PokemonBreedTreeLastRowPositions, BreedTreePosition } from './tree'
+import { BreedTreePosition, PokemonBreederKind, PokemonBreedTreeLastRowPositions } from './tree'
 
 export type GenderlessPokemonEvolutionTree = Readonly<[number, number, Option<number>]>
 

@@ -16,13 +16,6 @@ export enum PokemonBreederKind {
 	Nature = 'Nature',
 }
 
-export type PokemonBreederKindPositions = ReadonlyMap<BreedTreePosition, PokemonBreederKind>
-
-export type PokemonBreedTreeLastRowPositions = {
-	natured: PokemonBreederKindPositions
-	natureless: PokemonBreederKindPositions
-}
-
 export class BreedTreePosition {
 	constructor(
 		public row: number,
@@ -47,6 +40,13 @@ export class BreedTreePosition {
 
 		return [parent1, parent2]
 	}
+}
+
+export type PokemonBreederKindPositions = ReadonlyMap<BreedTreePosition, PokemonBreederKind>
+
+export type PokemonBreedTreeLastRowPositions = {
+	natured: PokemonBreederKindPositions
+	natureless: PokemonBreederKindPositions
 }
 
 export type PokemonBreedTreeLastRowPositionsPerGeneration = Readonly<Record<number, PokemonBreedTreeLastRowPositions>>

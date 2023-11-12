@@ -3,7 +3,7 @@ import staticPlugin from '@elysiajs/static'
 import { render } from '@lit-labs/ssr'
 import { collectResultSync } from '@lit-labs/ssr/lib/render-result'
 import { index } from './pages'
-import { buildComponents } from './components/build'
+import { buildComponents } from './build'
 
 await buildComponents()
 

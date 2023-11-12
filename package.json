@@ -1,10 +1,11 @@
 {
 	"name": "pokemmo-breeder-ts",
-	"module": "src/main.ts",
+	"module": "src/server.ts",
 	"type": "module",
 	"scripts": {
-		"dev": "concurrently \"bun --hot run src/main.ts\" \"bun run tailwind:dev\"",
-		"tailwind": "bunx --bun tailwindcss -i ./src/views/styles/globals.css -o ./assets/styles.css",
+		"start": "bun run tailwind && bun run src/server.ts",
+		"dev": "concurrently \"bun --hot run src/server.ts\" \"bun run tailwind:dev\"",
+		"tailwind": "bunx --bun tailwindcss -i ./src/styles/globals.css -o ./assets/styles.css",
 		"tailwind:dev": "bunx --bun tailwindcss -i ./src/styles/globals.css -o ./assets/styles.css --watch",
 		"typecheck": "bunx --bun tsc",
 		"format:check": "prettier --check .",
@@ -30,6 +31,7 @@
 	"dependencies": {
 		"@elysiajs/static": "^0.7.1",
 		"@lit-labs/ssr": "latest",
+		"@lit/context": "^1.0.1",
 		"elysia": "^0.7.24",
 		"lit": "latest",
 		"ts-results": "^3.3.0"
