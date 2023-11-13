@@ -18,9 +18,7 @@ export function index() {
 		</head>
 		<body>
 			<final-pokemon-node-form>
-				<final-pokemon-node-ivs></final-pokemon-node-ivs>
 			</final-pokemon-node-form>
-			<example-element></example-element>
 		</body>
 	</html> `
 }

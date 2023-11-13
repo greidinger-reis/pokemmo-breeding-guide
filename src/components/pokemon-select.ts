@@ -1,23 +1,24 @@
-import { consume, provide } from '@lit/context'
-import { LitElement, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { FinalPokemonNodeContext } from '.'
 import { PokemonBreedTreeNode } from '../core/tree'
-import { Option, Some } from 'ts-results'
+import { None, Option, Some } from 'ts-results'
 import { Pokemon, PokemonEggGroup, PokemonGender, PokemonIv, PokemonNature, PokemonType } from '../core/pokemon'
+import { LitElement, html } from 'lit'
 
 @customElement('final-pokemon-node-form')
 class FinalPokemonNodeForm extends LitElement {
-	@provide({ context: FinalPokemonNodeContext })
 	@property({ attribute: false, type: Object })
-	finalPokemonNode: Option<PokemonBreedTreeNode>
+	finalPokemonNode: Option<PokemonBreedTreeNode> = None
+
+	setFinalPokemon(e: CustomEvent<{ newpokemon: PokemonBreedTreeNode }>) {
+		this.finalPokemonNode = Some(e.detail.newpokemon)
+	}
 
 	render() {
 		return html`
 			<div>
 				<h2>Final Pokemon Node Form</h2>
 				<pre>${JSON.stringify(this.finalPokemonNode, null, 4)}</pre>
-				<slot></slot>
+				<final-pokemon-node-ivs @new-pokemon=${this.setFinalPokemon}></final-pokemon-node-ivs>
 			</div>
 		`
 	}
@@ -25,9 +26,6 @@ class FinalPokemonNodeForm extends LitElement {
 
 @customElement('final-pokemon-node-ivs')
 class FinalPokemonNodeIvs extends LitElement {
-	@consume({ context: FinalPokemonNodeContext })
-	finalPokemonNode: Option<PokemonBreedTreeNode>
-
 	DEBUGsetFinalPokemonNode() {
 		const node = new PokemonBreedTreeNode({
 			ivs: Some([PokemonIv.HP, PokemonIv.Attack]),
@@ -44,18 +42,18 @@ class FinalPokemonNodeIvs extends LitElement {
 			),
 		})
 
-		this.finalPokemonNode = Some(node)
-		console.log(this.finalPokemonNode)
+		this.dispatchEvent(
+			new CustomEvent('new-pokemon', { detail: { newpokemon: node }, bubbles: true, composed: true }),
+		)
 	}
 
 	render() {
 		return html`
 			<div>
-				<button @click=${this.DEBUGsetFinalPokemonNode}>Set Final Pokemon Node</button>
+				<sl-button @click=${this.DEBUGsetFinalPokemonNode}>Set Final Pokemon Node</sl-button>
 			</div>
 		`
 	}
 }
 
 export { FinalPokemonNodeForm, FinalPokemonNodeIvs }
-
