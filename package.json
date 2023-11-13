@@ -1,39 +1,36 @@
 {
-	"name": "pokemmo-breeder-ts",
-	"module": "src/server.ts",
-	"type": "module",
-	"scripts": {
-		"start": "bun run tailwind && bun run src/server.ts",
-		"dev": "concurrently \"bun --hot run src/server.ts\" \"bun run tailwind:dev\"",
-		"tailwind": "bunx --bun tailwindcss -i ./src/styles/globals.css -o ./assets/styles.css",
-		"tailwind:dev": "bunx --bun tailwindcss -i ./src/styles/globals.css -o ./assets/styles.css --watch",
-		"typecheck": "bunx --bun tsc",
-		"format:check": "prettier --check .",
-		"format": "prettier --write . --list-different",
-		"lint": "eslint . --report-unused-disable-directives",
-		"lint:fix": "eslint . --report-unused-disable-directives --fix"
-	},
-	"devDependencies": {
-		"@t3-oss/env-core": "^0.7.1",
-		"@total-typescript/ts-reset": "^0.5.1",
-		"bun-types": "latest",
-		"concurrently": "^8.2.2",
-		"daisyui": "^3.9.4",
-		"prettier": "^3.0.3",
-		"prettier-plugin-tailwindcss": "^0.5.7",
-		"tailwindcss": "^3.3.5",
-		"ts-lit-plugin": "^2.0.1",
-		"zod": "^3.22.4"
-	},
-	"peerDependencies": {
-		"typescript": "^5.0.0"
-	},
-	"dependencies": {
-		"@elysiajs/static": "^0.7.1",
-		"@lit-labs/ssr": "latest",
-		"@lit/context": "^1.0.1",
-		"elysia": "^0.7.24",
-		"lit": "latest",
-		"ts-results": "^3.3.0"
-	}
+  "name": "pokemmo-breeder-ts",
+  "module": "src/server.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/server.ts",
+    "dev": "bun --hot run src/server.ts",
+    "typecheck": "bunx --bun tsc",
+    "format:check": "prettier --check .",
+    "format": "prettier --write . --list-different",
+    "lint": "eslint . --report-unused-disable-directives",
+    "lint:fix": "eslint . --report-unused-disable-directives --fix"
+  },
+  "devDependencies": {
+    "@t3-oss/env-core": "^0.7.1",
+    "@total-typescript/ts-reset": "^0.5.1",
+    "bun-postcss": "^0.1.0",
+    "bun-types": "latest",
+    "concurrently": "^8.2.2",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "ts-lit-plugin": "^2.0.1",
+    "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@elysiajs/static": "^0.7.1",
+    "@lit-labs/ssr": "latest",
+    "@lit/context": "^1.0.1",
+    "elysia": "^0.7.24",
+    "lit": "latest",
+    "ts-results": "^3.3.0"
+  }
 }

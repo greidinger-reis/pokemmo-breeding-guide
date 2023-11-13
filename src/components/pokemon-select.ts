@@ -50,7 +50,7 @@ class FinalPokemonNodeIvs extends LitElement {
 
 	render() {
 		return html`
-			<div class="w-96 h-96">
+			<div>
 				<button @click=${this.DEBUGsetFinalPokemonNode}>Set Final Pokemon Node</button>
 			</div>
 		`

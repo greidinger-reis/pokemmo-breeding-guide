@@ -1,10 +1,10 @@
-import { LitElement, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { LitElement, html } from 'lit'
+import { customElement, property, query } from 'lit/decorators.js'
 
 type Example = {
 	id: string
-	name: string;
-	createdAt: Date;
+	name: string
+	createdAt: Date
 }
 
 @customElement('example-element')
@@ -29,14 +29,12 @@ class ExampleElement extends LitElement {
 		return html`
 			<div>
 				${JSON.stringify(this.data, null, 4)}
-				<input type="text" class="input" name="name" id="name" />
-				<input type="date" class="input" name="createdAt" id="createdAt" />
-				<button class="btn" @click=${this.setData}>
-					Submit
-				</button>
+				<sl-input label="Name" type="text" name="name" id="name"></sl-input>
+				<sl-input label="Date" type="date" name="createdAt" id="createdAt"></sl-input>
+				<sl-button class="btn" @click=${this.setData}>Submit</sl-button>
 			</div>
 		`
 	}
 }
 
-export {ExampleElement}
+export { ExampleElement }

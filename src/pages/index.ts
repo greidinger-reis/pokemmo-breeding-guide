@@ -5,10 +5,18 @@ export function index() {
 		<head>
 			<meta charset="UTF-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-			<link rel="stylesheet" href="/styles.css" />
 			<script src="/index.js" type="module"></script>
+			<link
+				rel="stylesheet"
+				href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.11.2/cdn/themes/light.css"
+			/>
+			<script
+				type="module"
+				src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.11.2/cdn/shoelace.js"
+			></script>
+			<link rel="stylesheet" href="styles.css"></link>
 		</head>
-		<body class="h-screen">
+		<body>
 			<final-pokemon-node-form>
 				<final-pokemon-node-ivs></final-pokemon-node-ivs>
 			</final-pokemon-node-form>
