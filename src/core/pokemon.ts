@@ -67,7 +67,7 @@ export enum PokemonEggGroup {
 }
 
 export enum PokemonIv {
-	HP = 'HP',
+	HP = 'Hp',
 	Attack = 'Attack',
 	Defense = 'Defense',
 	SpecialAttack = 'SpecialAttack',

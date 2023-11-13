@@ -159,3 +159,52 @@ export const POKEMON_BREEDTREE_LASTROW_MAPPING: LastRowMapping = {
 		]),
 	},
 }
+
+export function getNumberOfPokemonBreederKind(
+	generations: number,
+): { kind: PokemonBreederKind; count: { natured: number; natureless: number } }[] {
+	const lastRowPositions = POKEMON_BREEDTREE_LASTROW_MAPPING[generations]
+
+	const natured = Array.from(lastRowPositions.natured.values()).filter((kind) => kind !== PokemonBreederKind.Nature)
+	const natureless = Array.from(lastRowPositions.natureless.values())
+
+	return [
+		{
+			kind: PokemonBreederKind.A,
+			count: {
+				natured: natured.filter((k) => k === PokemonBreederKind.A).length,
+				natureless: natureless.filter((k) => k === PokemonBreederKind.A).length,
+			},
+		},
+		{
+			kind: PokemonBreederKind.B,
+			count: {
+				natured: natured.filter((k) => k === PokemonBreederKind.B).length,
+				natureless: natureless.filter((k) => k === PokemonBreederKind.B).length,
+			},
+		},
+		{
+			kind: PokemonBreederKind.C,
+			count: {
+				natured: natured.filter((k) => k === PokemonBreederKind.C).length,
+				natureless: natureless.filter((k) => k === PokemonBreederKind.C).length,
+			},
+		},
+		{
+			kind: PokemonBreederKind.D,
+			count: {
+				natured: natured.filter((k) => k === PokemonBreederKind.D).length,
+				natureless: natureless.filter((k) => k === PokemonBreederKind.D).length,
+			},
+		},
+		{
+			kind: PokemonBreederKind.E,
+			count: {
+				natured: natured.filter((k) => k === PokemonBreederKind.E).length,
+				natureless: natureless.filter((k) => k === PokemonBreederKind.E).length,
+			},
+		},
+	]
+}
+
+export type NumberOfPokemonBreederKind = ReturnType<typeof getNumberOfPokemonBreederKind>
