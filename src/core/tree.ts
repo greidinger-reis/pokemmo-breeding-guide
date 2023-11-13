@@ -71,8 +71,19 @@ export class PokemonBreedTreeNode {
 			pokemon: None,
 			ivs: Some([PokemonIv.HP, PokemonIv.Attack]),
 			nature: None,
-			gender: None
+			gender: None,
 		})
+	}
+
+	static get default_ivs(): PokemonIv[] {
+		return [
+			PokemonIv.HP,
+			PokemonIv.Attack,
+			PokemonIv.Defense,
+			PokemonIv.SpecialAttack,
+			PokemonIv.SpecialDefense,
+			PokemonIv.Speed,
+		]
 	}
 }
 

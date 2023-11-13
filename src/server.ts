@@ -5,7 +5,7 @@ import { writeLiveReloadScript } from './live-reload/script'
 import { setupComponentsWatcher } from './live-reload/watcher'
 
 await buildComponents()
-writeLiveReloadScript()
+await writeLiveReloadScript()
 setupComponentsWatcher()
 
 new Elysia()

@@ -5,7 +5,7 @@
   "scripts": {
     "start": "bun run src/server.ts",
 	"live-reload": "bun run src/live-reload/ws-server.ts",
-    "dev": "concurrently \"bun run live-reload\" \"bun --hot run src/server.ts\"",
+    "dev": "concurrently \"bun run live-reload\" \"bun run src/server.ts\"",
     "typecheck": "bunx --bun tsc",
     "format:check": "prettier --check .",
     "format": "prettier --write . --list-different",
