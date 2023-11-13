@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/server.ts",
-    "dev": "bun --hot run src/server.ts",
+	"live-reload": "bun run src/live-reload/ws-server.ts",
+    "dev": "concurrently \"bun run live-reload\" \"bun --hot run src/server.ts\"",
     "typecheck": "bunx --bun tsc",
     "format:check": "prettier --check .",
     "format": "prettier --write . --list-different",
@@ -27,8 +28,6 @@
   },
   "dependencies": {
     "@elysiajs/static": "^0.7.1",
-    "@lit-labs/ssr": "latest",
-    "@lit/context": "^1.0.1",
     "elysia": "^0.7.24",
     "lit": "latest",
     "ts-results": "^3.3.0"

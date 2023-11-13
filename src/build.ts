@@ -1,6 +1,5 @@
 import { config } from './config'
 
-
 export async function buildComponents() {
 	const start = Date.now()
 	await Bun.build({

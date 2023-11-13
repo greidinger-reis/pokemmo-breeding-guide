@@ -65,6 +65,15 @@ export class PokemonBreedTreeNode {
 	}) {
 		Object.assign(this, args)
 	}
+
+	static default(): PokemonBreedTreeNode {
+		return new PokemonBreedTreeNode({
+			pokemon: None,
+			ivs: Some([PokemonIv.HP, PokemonIv.Attack]),
+			nature: None,
+			gender: None
+		})
+	}
 }
 
 export type PokemonNodeMap = Map<BreedTreePosition, PokemonBreedTreeNode>
