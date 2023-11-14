@@ -175,3 +175,6 @@ dist
 .DS_Store
 
 /assets
+
+/src/styles/input.css
+/src/styles/output.js

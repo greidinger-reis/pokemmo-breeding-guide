@@ -1,5 +1,7 @@
 import { ArgsParser } from './args'
 import fs from 'fs'
+import { minify } from 'csso'
+import { config } from './config'
 
 const argv = Bun.argv
 
@@ -10,15 +12,15 @@ let input: string | undefined = args.input
 //@ts-ignore
 let output: string | undefined = args.output
 
+let watch: boolean = args.['watch'] ?? false
+
 //@ts-ignore
 if (!input || !output) {
 	console.log('Usage: twlit --input <file> --output <file>')
 	process.exit(1)
 }
 
-console.log(`🦊 Tw-lit: Watching ${input} and writing to ${output}`)
-
-async function writeLitstyles(input: string, output: string) {
+async function writeLitStyles(input: string, output: string) {
 	let contents = await Bun.file(input)
 		.text()
 		.catch(() => {
@@ -28,16 +30,22 @@ async function writeLitstyles(input: string, output: string) {
 
 	let cleanContents = contents.replaceAll('`', '')
 	cleanContents = cleanContents.replaceAll('\\', '\\\\')
+	if (config.env.NODE_ENV === 'production') {
+		cleanContents = minify(cleanContents).css
+	}
 
 	const litContents = `import { css } from "lit";\nexport const TWStyles = css\` ${cleanContents} \``
 
 	await Bun.write(output, litContents)
-		.catch(() => console.log(`TWLit - wrote to file ${output}`))
+		.then(() => console.log(`🦊 TWLit - wrote to file ${output}`))
 		.catch(console.error)
 }
 
-await writeLitstyles(input!, output!)
+await writeLitStyles(input!, output!)
 
-fs.watchFile(input, { interval: 1000 }, async () => {
-	await writeLitstyles(input!, output!)
-})
+if(watch){
+	console.log(`🦊 Tw-lit: Watching ${input} and writing to ${output}`)
+	fs.watchFile(input, { interval: 1000 }, async () => {
+		await writeLitStyles(input!, output!)
+	})
+}
