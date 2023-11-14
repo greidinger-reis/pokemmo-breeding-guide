@@ -1,4 +1,4 @@
-import { customElement, property, query, state } from 'lit/decorators.js'
+import { customElement, state } from 'lit/decorators.js'
 import { PokemonBreedTreeNode } from '../core/tree'
 import { LitElement, css, html } from 'lit'
 import { NumberOfPokemonBreederKind, PokemonIv, PokemonNature, getNumberOfPokemonBreederKind } from '..'
@@ -90,6 +90,9 @@ class FinalPokemonNodeForm extends LitElement {
 		.ivs-select-container {
 			display: flex;
 			gap: 1rem;
+		}
+		.iv-select-container {
+			width: 100%;
 		}
 		.iv-select-container p {
 			margin: 0;
