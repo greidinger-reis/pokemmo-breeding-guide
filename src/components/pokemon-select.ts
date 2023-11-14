@@ -1,6 +1,6 @@
 import { customElement, state } from 'lit/decorators.js'
 import { PokemonBreedTreeNode } from '../core/tree'
-import { LitElement, css, html } from 'lit'
+import { LitElement, html } from 'lit'
 import { NumberOfPokemonBreederKind, PokemonIv, PokemonNature, getNumberOfPokemonBreederKind } from '..'
 import { None, Option, Some } from 'ts-results'
 import { PokemonBreederKind } from '../core/tree'
@@ -64,11 +64,8 @@ class FinalPokemonNodeForm extends LitElement {
 		this.requestUpdate()
 	}
 
-	private handleIvSelectChange(e: CustomEvent) {
-		//@ts-ignore
-		const [index, iv] = e.currentTarget?.value.split(':') as [string, PokemonIv]
-
-		this.currentIvSelection[Number(index)].value = iv
+	handleIvSelectChange(index: number, iv: PokemonIv) {
+		this.currentIvSelection[index].value = iv
 	}
 
 	private handleSelectNature(e: CustomEvent) {
@@ -144,12 +141,15 @@ class FinalPokemonNodeForm extends LitElement {
 											</strong>
 											1x31 IV in
 										</p>
-										<sl-select @sl-change=${this.handleIvSelectChange} value=${`${i}:${iv.value}`}>
+										<sl-select @sl-change=${(e:CustomEvent) => {
+											//@ts-ignore
+											const newVal = e.currentTarget?.value as PokemonIv
+											this.handleIvSelectChange(i, newVal)
+										}
+										} value=${iv.value}>
 											${PokemonBreedTreeNode.default_ivs.map(
 												(iv) => html`
-													<sl-option value=${`${i}:${iv}`}
-														>${pascalCaseToSpacedPascal(iv)}</sl-option
-													>
+													<sl-option value=${iv}>${pascalCaseToSpacedPascal(iv)}</sl-option>
 												`,
 											)}
 										</sl-select>

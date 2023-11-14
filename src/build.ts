@@ -8,5 +8,6 @@ export async function buildComponents() {
 		target: 'browser',
 		minify: config.env.NODE_ENV === 'production',
 	})
-	console.log(`🦊 Compiled Components - ${Date.now() - start}ms`)
+		.then(() => console.log(`🦊 Compiled Components - ${Date.now() - start}ms`))
+		.catch(console.error)
 }

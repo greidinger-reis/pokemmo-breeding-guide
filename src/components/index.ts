@@ -1,2 +1,2 @@
 export * from './pokemon-select'
-export * from './page-root'
+export * from './root'
