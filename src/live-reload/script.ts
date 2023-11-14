@@ -42,6 +42,7 @@ export async function writeLiveReloadScript(){
 
 	if (config.env.NODE_ENV !== 'development') {
 		await Bun.write(file, '')
+		return
 	}
 
 	await Bun.write(file, liveReloadScript())

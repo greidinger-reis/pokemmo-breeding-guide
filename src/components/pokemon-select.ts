@@ -4,6 +4,7 @@ import { LitElement, css, html } from 'lit'
 import { NumberOfPokemonBreederKind, PokemonIv, PokemonNature, getNumberOfPokemonBreederKind } from '..'
 import { None, Option, Some } from 'ts-results'
 import { PokemonBreederKind } from '../core/tree'
+import { TWStyles } from '../styles/output'
 
 type CurrentIvSelection = {
 	value: PokemonIv
@@ -80,35 +81,11 @@ class FinalPokemonNodeForm extends LitElement {
 		this.natured = e.currentTarget?.checked
 	}
 
-	static styles = css`
-		.container {
-			display: flex;
-			flex-direction: column;
-			padding: 1rem;
-			gap: 0.5rem;
-		}
-		.ivs-select-container {
-			display: flex;
-			gap: 1rem;
-		}
-		.iv-select-container {
-			width: 100%;
-		}
-		.iv-select-container p {
-			margin: 0;
-		}
-		.nature-container {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			gap: 0.5rem;
-			min-height: 42px;
-		}
-	`
+	static styles = TWStyles
 
 	render() {
 		return html`
-			<div class="container">
+			<div class="flex flex-col p-4 gap-2">
 				<pre>${JSON.stringify({
 					natured: this.natured,
 					currentNature: this.currentNature,
@@ -117,14 +94,13 @@ class FinalPokemonNodeForm extends LitElement {
 				}, null, 4)}</pre>
 				<label for="radio-iv-count">IV Count</label>
 				<sl-radio-group
-					class="radio-iv-count"
 					@sl-change=${this.handleIvCountChange}
 					name="radio-iv-count"
 					value="2"
 				>
 					${[2, 3, 4, 5].map((count) => html` <sl-radio-button value="${count}">${count}</sl-radio-button> `)}
 				</sl-radio-group>
-				<div class="nature-container">
+				<div class="flex items-center gap-2 min-h-[42px]">
 					<sl-switch
 						style="--width: 42px; --height: 24px; --thumb-size: 20px"
 						name="natured"
@@ -147,11 +123,11 @@ class FinalPokemonNodeForm extends LitElement {
 						  `
 						: null}
 				</div>
-				<div class="ivs-select-container">
+				<div class="flex gap-4">
 					${this.currentIvSelection.map((iv, i) =>
 						iv.selected
 							? html`
-									<div class="iv-select-container">
+									<div class="w-full">
 										<p>
 											<strong>
 												${(() => {

@@ -3,9 +3,12 @@
   "module": "src/server.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run src/server.ts",
-	"live-reload": "bun run src/live-reload/ws-server.ts",
-    "dev": "concurrently \"bun run live-reload\" \"bun run src/server.ts\"",
+    "start": "bun run tailwind && bun run src/server.ts",
+    "dev": "concurrently \"bun run tailwind:dev\" \"bun run tw-lit\" \"bun run live-reload\" \"bun run src/server.ts\"",
+    "live-reload": "bun run src/live-reload/ws-server.ts",
+    "tailwind": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css",
+    "tailwind:dev": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css --watch",
+    "tw-lit": "bun run ./src/twlit.ts --input ./src/styles/input.css --output ./src/styles/output.js",
     "typecheck": "bunx --bun tsc",
     "format:check": "prettier --check .",
     "format": "prettier --write . --list-different",
@@ -15,11 +18,11 @@
   "devDependencies": {
     "@t3-oss/env-core": "^0.7.1",
     "@total-typescript/ts-reset": "^0.5.1",
-    "bun-postcss": "^0.1.0",
     "bun-types": "latest",
     "concurrently": "^8.2.2",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.7",
+    "tailwindcss": "^3.3.5",
     "ts-lit-plugin": "^2.0.1",
     "zod": "^3.22.4"
   },
