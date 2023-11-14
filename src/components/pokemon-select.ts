@@ -1,7 +1,7 @@
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, property, query, state } from 'lit/decorators.js'
 import { PokemonBreedTreeNode } from '../core/tree'
 import { LitElement, css, html } from 'lit'
-import { NumberOfPokemonBreederKind, PokemonIv, getNumberOfPokemonBreederKind } from '..'
+import { NumberOfPokemonBreederKind, PokemonIv, PokemonNature, getNumberOfPokemonBreederKind } from '..'
 import { None, Option, Some } from 'ts-results'
 import { PokemonBreederKind } from '../core/tree'
 
@@ -23,6 +23,20 @@ class FinalPokemonNodeForm extends LitElement {
 	@state()
 	private currentNumberOfPokemonPerGeneration: NumberOfPokemonBreederKind = getNumberOfPokemonBreederKind(2)
 
+	@state()
+	private currentNature: Option<PokemonNature> = None
+
+	@state()
+	private natured = false
+
+	@state()
+	private currentIvSelection: CurrentIvSelection[] = PokemonBreedTreeNode.default_ivs
+		.slice(0, -1) // Remove the Nature Breeder Kind
+		.map((iv, i) => ({
+			value: iv,
+			selected: [0, 1].includes(i), // The default selection is two
+		}))
+
 	private IndexToKind = {
 		0: PokemonBreederKind.A,
 		1: PokemonBreederKind.B,
@@ -30,15 +44,6 @@ class FinalPokemonNodeForm extends LitElement {
 		3: PokemonBreederKind.D,
 		4: PokemonBreederKind.E,
 	}
-
-	@state()
-	private currentIvSelection: CurrentIvSelection[] = PokemonBreedTreeNode.default_ivs.slice(0, -1).map((iv, i) => ({
-		value: iv,
-		selected: [0, 1].includes(i),
-	}))
-
-	@state()
-	private natured = false
 
 	private setFinalPokemon(node: PokemonBreedTreeNode) {
 		this.finalPokemonNode = Some(node)
@@ -56,8 +61,6 @@ class FinalPokemonNodeForm extends LitElement {
 		this.currentNumberOfPokemonPerGeneration = getNumberOfPokemonBreederKind(generations)
 
 		this.requestUpdate()
-
-		console.log(this.currentNumberOfPokemonPerGeneration)
 	}
 
 	private handleIvSelectChange(e: CustomEvent) {
@@ -67,12 +70,23 @@ class FinalPokemonNodeForm extends LitElement {
 		this.currentIvSelection[Number(index)].value = iv
 	}
 
+	private handleSelectNature(e: CustomEvent) {
+		//@ts-ignore
+		this.currentNature = Some(e.currentTarget?.value as PokemonNature)
+	}
+
 	private handleNaturedChange(e: CustomEvent) {
 		//@ts-ignore
 		this.natured = e.currentTarget?.checked
 	}
 
 	static styles = css`
+		.container {
+			display: flex;
+			flex-direction: column;
+			padding: 1rem;
+			gap: 0.5rem;
+		}
 		.ivs-select-container {
 			display: flex;
 			gap: 1rem;
@@ -80,61 +94,91 @@ class FinalPokemonNodeForm extends LitElement {
 		.iv-select-container p {
 			margin: 0;
 		}
+		.nature-container {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 0.5rem;
+			min-height: 42px;
+		}
 	`
 
 	render() {
 		return html`
-			<div>
-				<h2>Final Pokemon Node Form</h2>
-				<div>
-					<label for="radio-iv-count">IV Count</label>
-					<sl-radio-group
-						class="radio-iv-count"
-						@sl-change=${this.handleIvCountChange}
-						name="radio-iv-count"
-						value="2"
+			<div class="container">
+				<pre>${JSON.stringify({
+					natured: this.natured,
+					currentNature: this.currentNature,
+					currentIvSelection: this.currentIvSelection,
+					finalPokemonNode: this.finalPokemonNode
+				}, null, 4)}</pre>
+				<label for="radio-iv-count">IV Count</label>
+				<sl-radio-group
+					class="radio-iv-count"
+					@sl-change=${this.handleIvCountChange}
+					name="radio-iv-count"
+					value="2"
+				>
+					${[2, 3, 4, 5].map((count) => html` <sl-radio-button value="${count}">${count}</sl-radio-button> `)}
+				</sl-radio-group>
+				<div class="nature-container">
+					<sl-switch
+						style="--width: 42px; --height: 24px; --thumb-size: 20px"
+						name="natured"
+						@sl-change=${this.handleNaturedChange}
+						>Natured?</sl-switch
 					>
-						${[2, 3, 4, 5].map((count) => html` <sl-radio-button value="${count}">${count}</sl-radio-button> `)}
-					</sl-radio-group>
-					<sl-switch name="natured" @sl-change=${this.handleNaturedChange}>Natured?</sl-switch>
-					<div class="ivs-select-container">
-						${this.currentIvSelection.map((iv, i) =>
-							iv.selected
-								? html`
-										<div class="iv-select-container">
-											<p>
-												<strong
-													>${(() => {
-														const value = this.currentNumberOfPokemonPerGeneration.filter(
-															(n) => {
-																const kind =
-																	this.IndexToKind[i as keyof typeof this.IndexToKind]
-																return n.kind === kind
-															},
-														)[0].count
-														return this.natured ? value.natured : value.natureless
-													})()}</strong
-												>
-												1x31 IV in
-											</p>
-											<sl-select
-												@sl-change=${this.handleIvSelectChange}
-												value=${`${i}:${iv.value}`}
-											>
-												${PokemonBreedTreeNode.default_ivs.map(
-													(iv) => html`
-														<sl-option value=${`${i}:${iv}`}
-															>${pascalCaseToSpacedPascal(iv)}</sl-option
-														>
-													`,
-												)}
-											</sl-select>
-										</div>
-								  `
-								: null,
-						)}
-					</div>
-				</sl-switch>
+					${this.natured
+						? html`
+								<sl-select
+									placeholder="Select a nature"
+									value=${this.currentNature.unwrapOr("")}
+									@sl-change=${this.handleSelectNature}
+								>
+									${Object.keys(PokemonNature).map(
+										(nature) => html`
+											<sl-option value=${nature}>${pascalCaseToSpacedPascal(nature)}</sl-option>
+										`,
+									)}
+								</sl-select>
+						  `
+						: null}
+				</div>
+				<div class="ivs-select-container">
+					${this.currentIvSelection.map((iv, i) =>
+						iv.selected
+							? html`
+									<div class="iv-select-container">
+										<p>
+											<strong>
+												${(() => {
+													// Gets the number of PokemonBreederKind of this selection
+													const value = this.currentNumberOfPokemonPerGeneration.filter(
+														(n) => {
+															const kind =
+																this.IndexToKind[i as keyof typeof this.IndexToKind]
+															return n.kind === kind
+														},
+													)[0].count
+													return this.natured ? value.natured : value.natureless
+												})()}
+											</strong>
+											1x31 IV in
+										</p>
+										<sl-select @sl-change=${this.handleIvSelectChange} value=${`${i}:${iv.value}`}>
+											${PokemonBreedTreeNode.default_ivs.map(
+												(iv) => html`
+													<sl-option value=${`${i}:${iv}`}
+														>${pascalCaseToSpacedPascal(iv)}</sl-option
+													>
+												`,
+											)}
+										</sl-select>
+									</div>
+							  `
+							: null,
+					)}
+				</div>
 			</div>
 		`
 	}
