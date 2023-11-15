@@ -1,5 +1,3 @@
-import { config } from "../config"
-
 export function liveReloadScript({
 	debounceTime = 100,
 	url = 'ws://localhost:3001/ws',
@@ -37,13 +35,5 @@ socket.onerror = function(error) {
 })();`
 }
 
-export async function writeLiveReloadScript(){
-	const file = Bun.file('assets/live-reload.js')
-
-	if (config.env.NODE_ENV !== 'development') {
-		await Bun.write(file, '')
-		return
-	}
-
-	await Bun.write(file, liveReloadScript())
-}
+const file = Bun.file('assets/live-reload.js')
+await Bun.write(file, liveReloadScript()).then(()=> console.log(`🦊 Live reload script file written successfully.`))

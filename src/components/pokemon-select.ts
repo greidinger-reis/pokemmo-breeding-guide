@@ -97,7 +97,7 @@ class FinalPokemonNodeForm extends LitElement {
 				>
 					${[2, 3, 4, 5].map((count) => html` <sl-radio-button value="${count}">${count}</sl-radio-button> `)}
 				</sl-radio-group>
-				<div class="flex items-center gap-2 min-h-[42px]">
+				<div class="flex items-center gap-2 min-h-[42px] bg-blue-500">
 					<sl-switch
 						style="--width: 42px; --height: 24px; --thumb-size: 20px"
 						name="natured"

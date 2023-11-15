@@ -1,15 +1,9 @@
 import { Elysia } from 'elysia'
 import staticPlugin from '@elysiajs/static'
-import { buildComponents } from './build'
-import { writeLiveReloadScript } from './live-reload/script'
-import { setupComponentsWatcher } from './live-reload/watcher'
 import { config } from './config'
 import { gzipAssets } from './gzip'
 
-await buildComponents()
 await gzipAssets()
-await writeLiveReloadScript()
-setupComponentsWatcher()
 
 new Elysia()
 	.use(
@@ -31,4 +25,5 @@ new Elysia()
 
 		return tmpl
 	})
+	.get('/foo', ()=> 'bar2')
 	.listen(3000, ({ port, hostname }) => console.log(`🦊 Server running ${hostname}:${port}`))
