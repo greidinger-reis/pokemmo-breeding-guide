@@ -174,7 +174,7 @@ dist
 # Finder (MacOS) folder config
 .DS_Store
 
-assets
+public/index.js
 
 src/styles/input.css
 src/styles/output.js

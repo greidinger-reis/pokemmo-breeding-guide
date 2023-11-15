@@ -1,13 +1,6 @@
-export function liveReloadScript({
-	debounceTime = 100,
-	url = 'ws://localhost:3001/ws',
-}: {
-	url?: string
-	debounceTime?: number
-} = {}): string {
-	return `let reloadTimeout;
+let reloadTimeout;
 (function () {
-let socket = new WebSocket(\"${url}\");
+let socket = new WebSocket("ws://localhost:3001/ws");
 
 socket.onopen = function(e) {
 	console.log("connected")
@@ -22,7 +15,7 @@ socket.onmessage = function(event) {
 	// Set a new reload timeout
 	reloadTimeout = setTimeout(() => {
 	location.reload();
-	}, ${debounceTime});  // 50ms debounce time
+	}, 100);  // 50ms debounce time
 };
 
 socket.onclose = function(event) {
@@ -32,8 +25,4 @@ socket.onclose = function(event) {
 socket.onerror = function(error) {
 	console.log("error: " + error.message);
 };
-})();`
-}
-
-const file = Bun.file('public/live-reload.js')
-await Bun.write(file, liveReloadScript()).then(()=> console.log(`🦊 Live reload script file written successfully.`))
+})();

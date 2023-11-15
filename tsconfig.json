@@ -22,5 +22,5 @@
 		],
 		"plugins": [{ "name": "ts-lit-plugin" }]
 	},
-	"exclude": ["assets/index.js"]
+	"exclude": ["public"]
 }

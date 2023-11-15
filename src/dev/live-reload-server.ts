@@ -1,37 +1,28 @@
-import { Elysia } from "elysia";
-import { type ElysiaWS } from "elysia/ws";
+import { Elysia } from 'elysia'
+import { type ElysiaWS } from 'elysia/ws'
 
-let wsConnections = new Set<ElysiaWS<any, any>>();
+let wsConnections = new Set<ElysiaWS<any, any>>()
 
 function dispatch() {
-  wsConnections.forEach((connection) => {
-    // console.log("sending refresh");
-    connection.send("refresh");
-  });
+	wsConnections.forEach((connection) => {
+		connection.send('refresh')
+	})
 }
 
-const port = process.argv[2] || 3001;
+const port = process.argv[2] || 3001
 
 const app = new Elysia()
-  .ws("/ws", {
-    open(ws) {
-      // console.log("open");
-      wsConnections.add(ws);
-    },
-    close(ws) {
-      // console.log("close");
-      wsConnections.delete(ws);
-    },
-    // message(ws, message) {
-    //   console.log("message", message);
-    // },
-  })
-  .get("/restart", () => {
-    // console.log("recieved restart");
-    dispatch();
-  })
-  .listen(port);
+	.ws('/ws', {
+		open(ws) {
+			wsConnections.add(ws)
+		},
+		close(ws) {
+			wsConnections.delete(ws)
+		},
+	})
+	.get('/restart', () => {
+		dispatch()
+	})
+	.listen(port)
 
-console.log(
-  `🦊 Live reload server running ${app.server?.hostname}:${app.server?.port}`,
-);
+console.log(`🦊 Live reload server running ${app.server?.hostname}:${app.server?.port}`)

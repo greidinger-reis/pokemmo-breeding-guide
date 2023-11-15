@@ -1,15 +1,15 @@
 {
   "name": "pokemmo-breeder-ts",
-  "module": "src/server.ts",
+  "module": "src/main.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run tailwind && bun run lit-setup && rm assets/live-reload.js && bun run src/server.ts",
-    "dev": "concurrently \"bun run tailwind:dev\" \"bun run lit-setup:watch\" \"bun run live-reload\" \"bun run --hot src/server.ts\"",
+    "start": "bun run tailwind && bun run build-client && bun run src/gzip.ts && bun run src/main.ts",
+    "dev": "concurrently \"bun run tailwind:dev\" \"bun run build-client:watch\" \"bun run live-reload\" \"bun run --hot src/main.ts\"",
     "live-reload": "bun run src/dev/live-reload-client.ts && bun run src/dev/live-reload-server.ts",
     "tailwind": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css",
     "tailwind:dev": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css --watch",
-    "lit-setup": "bun run ./src/lit-setup.ts --input ./src/styles/input.css --output ./src/styles/output.js",
-    "lit-setup:watch": "bun run ./src/lit-setup.ts --input ./src/styles/input.css --output ./src/styles/output.js --watch",
+    "build-client": "bun run ./src/build.ts --input ./src/styles/input.css --output ./src/styles/output.js",
+    "build-client:watch": "bun run ./src/build.ts --input ./src/styles/input.css --output ./src/styles/output.js --watch",
     "typecheck": "bunx --bun tsc",
     "format:check": "prettier --check .",
     "format": "prettier --write . --list-different",
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@elysiajs/static": "^0.7.1",
+    "@lit-labs/ssr": "^3.1.9",
     "elysia": "^0.7.24",
     "lit": "latest",
     "ts-results": "^3.3.0"

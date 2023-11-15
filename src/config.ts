@@ -9,12 +9,6 @@ const env = createEnv({
 	runtimeEnv: process.env,
 })
 
-const args = {
-	// watch: process.argv.includes("--watch"),
-	// liveReload: true,
-}
-
 export const config = {
 	env,
-	args,
 }

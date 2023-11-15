@@ -1,10 +1,10 @@
 import { customElement, state } from 'lit/decorators.js'
-import { PokemonBreedTreeNode } from '../core/tree'
+import { PokemonBreedTreeNode } from '../tree'
 import { LitElement, html } from 'lit'
 import { NumberOfPokemonBreederKind, PokemonIv, PokemonNature, getNumberOfPokemonBreederKind } from '..'
 import { None, Option, Some } from 'ts-results'
-import { PokemonBreederKind } from '../core/tree'
-import { TWStyles } from '../styles/output'
+import { PokemonBreederKind } from '../tree'
+import { TWStyles } from '../../styles/output'
 
 type CurrentIvSelection = {
 	value: PokemonIv
@@ -97,7 +97,7 @@ class FinalPokemonNodeForm extends LitElement {
 				>
 					${[2, 3, 4, 5].map((count) => html` <sl-radio-button value="${count}">${count}</sl-radio-button> `)}
 				</sl-radio-group>
-				<div class="flex items-center gap-2 min-h-[42px] bg-blue-500">
+				<div class="flex items-center gap-2 min-h-[42px]">
 					<sl-switch
 						style="--width: 42px; --height: 24px; --thumb-size: 20px"
 						name="natured"

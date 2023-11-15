@@ -23,17 +23,17 @@ function parseArgs(): [string, string, boolean] {
 	return [input, output, watch]
 }
 
-class LitSetup {
+class ClientBundler {
 	constructor(stylesInput: string, stylesOutput: string, devMode: boolean) {
-		this.setupCustomElements(devMode)
+		this.setupClient(devMode)
 		this.setupStyles(stylesInput, stylesOutput, devMode)
 	}
 
-	async buildCustomElements() {
+	async buildClient() {
 		const start = Date.now()
 		await Bun.build({
-			entrypoints: ['src/index.ts'],
-			outdir: 'assets',
+			entrypoints: ['src/client/index.ts'],
+			outdir: 'public',
 			target: 'browser',
 			minify: config.env.NODE_ENV === 'production',
 		})
@@ -41,14 +41,14 @@ class LitSetup {
 			.catch(console.error)
 	}
 
-	async setupCustomElements(dev: boolean) {
-		await this.buildCustomElements()
+	async setupClient(dev: boolean) {
+		await this.buildClient()
 
 		if (dev) {
 			let reloadCount = 0
-			fs.watch('src/components', { persistent: false }, async () => {
+			fs.watch('src/client/elements', { persistent: false }, async () => {
 				reloadCount++
-				await this.buildCustomElements()
+				await this.buildClient()
 				await fetch('http://localhost:3001/restart')
 
 				console.log(`🦊 Triggering Live Reload. Reload count: ${reloadCount}`)
@@ -56,7 +56,7 @@ class LitSetup {
 		}
 	}
 
-	async parseAndWriteStyles(input: string, output: string) {
+	async parseAndWriteStylesForLit(input: string, output: string) {
 		let contents = await Bun.file(input)
 			.text()
 			.catch(() => {
@@ -77,17 +77,23 @@ class LitSetup {
 			.catch(console.error)
 	}
 
+	async writeStylesForSSR(input:string) {
+		const file = Bun.file(input)
+		await Bun.write('public/styles.css', file)
+	}
+
 	async setupStyles(input: string, output: string, dev: boolean) {
-		await this.parseAndWriteStyles(input, output)
+		await this.parseAndWriteStylesForLit(input, output)
+		await this.writeStylesForSSR(input)
 
 		if (dev) {
 			console.log(`🦊 Tw-lit: Watching ${input} and writing to ${output}`)
 			fs.watchFile(input, { interval: 1000 }, async () => {
-				await this.parseAndWriteStyles(input, output)
+				await this.parseAndWriteStylesForLit(input, output)
+				await this.writeStylesForSSR(input)
 			})
 		}
 	}
 }
 
-const [input, output, dev] = parseArgs()
-new LitSetup(input, output, dev)
+new ClientBundler(...parseArgs())
