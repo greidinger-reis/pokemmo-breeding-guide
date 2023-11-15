@@ -1,5 +1,5 @@
 import { Pokemon, PokemonGender, PokemonIv, PokemonNature } from './pokemon'
-import { Option, Some, None } from 'ts-results'
+import { Option, Some, None, Err, Ok, Result } from 'ts-results'
 import { PokemonBreedErrorKind } from './breed'
 import { POKEMON_BREEDTREE_LASTROW_MAPPING } from './consts'
 
@@ -16,11 +16,14 @@ export enum PokemonBreederKind {
 	Nature = 'Nature',
 }
 
+export type BreedTreePositionKey = string
+export type InvalidPositionError = string
+
 export class BreedTreePosition {
 	constructor(
 		public row: number,
 		public col: number,
-	) {}
+	) { }
 
 	// If used on the first row (0,0) this will return an invalid position
 	public getPartnerPosition(): BreedTreePosition {
@@ -40,9 +43,38 @@ export class BreedTreePosition {
 
 		return [parent1, parent2]
 	}
+
+
+	public static getChildPositionFromParents(parent1: BreedTreePosition, parent2: BreedTreePosition): Result<Readonly <[BreedTreePosition,BreedTreePosition]>, InvalidPositionError> {
+		if (parent1.row !== parent2.row - 1) {
+			return Err('Parents are not on the same row')
+		}
+
+		if (parent1.col % 2 !== 0 || parent2.col % 2 !== 1) {
+			return Err('Parents are not on the same row')
+		}
+
+		const childRow = parent1.row - 1
+		const childCol = parent1.col / 2
+
+		const child1 = new BreedTreePosition(childRow, childCol)
+		const child2 = new BreedTreePosition(childRow, childCol + 1)
+
+		return Ok([child1, child2])
+	}
+
+	public key(): BreedTreePositionKey {
+		return `${this.row},${this.col}`
+	}
+
+	static fromKey(key: BreedTreePositionKey): BreedTreePosition {
+		const [row, col] = key.split(',').map(Number)
+
+		return new BreedTreePosition(row, col)
+	}
 }
 
-export type PokemonBreederKindPositions = ReadonlyMap<BreedTreePosition, PokemonBreederKind>
+export type PokemonBreederKindPositions = ReadonlyMap<BreedTreePositionKey, PokemonBreederKind>
 
 export type PokemonBreedTreeLastRowPositions = {
 	natured: PokemonBreederKindPositions
