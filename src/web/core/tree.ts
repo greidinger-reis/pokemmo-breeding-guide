@@ -1,4 +1,4 @@
-import { Pokemon, PokemonGender, PokemonIv, PokemonNature } from './pokemon'
+import { PokemonSpecies, PokemonGender, PokemonIv, PokemonNature } from './pokemon'
 import { Option, Some, None, Err, Ok, Result } from 'ts-results'
 import { PokemonBreedErrorKind } from './breed'
 import { POKEMON_BREEDTREE_LASTROW_MAPPING } from './consts'
@@ -84,13 +84,13 @@ export type PokemonBreedTreeLastRowPositions = {
 export type PokemonBreedTreeLastRowPositionsPerGeneration = Readonly<Record<number, PokemonBreedTreeLastRowPositions>>
 
 export class PokemonBreedTreeNode {
-	public pokemon: Option<Pokemon>
+	public pokemon: Option<PokemonSpecies>
 	public gender: Option<PokemonGender>
 	public nature: Option<PokemonNature>
 	public ivs: Option<PokemonIv[]>
 
 	constructor(args: {
-		pokemon: Option<Pokemon>
+		pokemon: Option<PokemonSpecies>
 		gender: Option<PokemonGender>
 		nature: Option<PokemonNature>
 		ivs: Option<PokemonIv[]>
@@ -155,7 +155,7 @@ export class PokemonBreedTree {
 			switch (v) {
 				case PokemonBreederKind.Nature:
 					this.nodes.set(
-						k,
+						BreedTreePosition.fromKey(k),
 						new PokemonBreedTreeNode({
 							pokemon: None,
 							gender: None,
@@ -166,7 +166,7 @@ export class PokemonBreedTree {
 					break
 				default:
 					this.nodes.set(
-						k,
+						BreedTreePosition.fromKey(k),
 						new PokemonBreedTreeNode({
 							pokemon: None,
 							gender: None,

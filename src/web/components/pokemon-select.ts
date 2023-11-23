@@ -1,10 +1,8 @@
 import { customElement, state } from 'lit/decorators.js'
-import { PokemonBreedTreeNode } from '../tree'
 import { LitElement, html } from 'lit'
-import { NumberOfPokemonBreederKind, PokemonIv, PokemonNature, getNumberOfPokemonBreederKind } from '..'
+import { PokemonBreederKind, PokemonBreedTreeNode, NumberOfPokemonBreederKind, PokemonIv, PokemonNature, getNumberOfPokemonBreederKind } from '../core'
 import { None, Option, Some } from 'ts-results'
-import { PokemonBreederKind } from '../tree'
-import { TWStyles } from '../../styles/output'
+import { TWStyles } from '@/styles/output'
 
 type CurrentIvSelection = {
 	value: PokemonIv
@@ -17,7 +15,7 @@ function pascalCaseToSpacedPascal(str: string): string {
 }
 
 @customElement('final-pokemon-node-form')
-class FinalPokemonNodeForm extends LitElement {
+export class FinalPokemonNodeForm extends LitElement {
 	@state()
 	private finalPokemonNode: Option<PokemonBreedTreeNode> = None
 
@@ -84,11 +82,11 @@ class FinalPokemonNodeForm extends LitElement {
 		return html`
 			<div class="flex flex-col p-4 gap-2">
 				<pre>${JSON.stringify({
-					natured: this.natured,
-					currentNature: this.currentNature,
-					currentIvSelection: this.currentIvSelection,
-					finalPokemonNode: this.finalPokemonNode
-				}, null, 4)}</pre>
+			natured: this.natured,
+			currentNature: this.currentNature,
+			currentIvSelection: this.currentIvSelection,
+			finalPokemonNode: this.finalPokemonNode
+		}, null, 4)}</pre>
 				<label for="radio-iv-count">IV Count</label>
 				<sl-radio-group
 					@sl-change=${this.handleIvCountChange}
@@ -105,62 +103,60 @@ class FinalPokemonNodeForm extends LitElement {
 						>Natured?</sl-switch
 					>
 					${this.natured
-						? html`
+				? html`
 								<sl-select
 									placeholder="Select a nature"
 									value=${this.currentNature.unwrapOr("")}
 									@sl-change=${this.handleSelectNature}
 								>
 									${Object.keys(PokemonNature).map(
-										(nature) => html`
+					(nature) => html`
 											<sl-option value=${nature}>${pascalCaseToSpacedPascal(nature)}</sl-option>
 										`,
-									)}
+				)}
 								</sl-select>
 						  `
-						: null}
+				: null}
 				</div>
 				<div class="flex gap-4">
 					${this.currentIvSelection.map((iv, i) =>
-						iv.selected
-							? html`
+					iv.selected
+						? html`
 									<div class="w-full">
 										<p>
 											<strong>
 												${(() => {
-													// Gets the number of PokemonBreederKind of this selection
-													const value = this.currentNumberOfPokemonPerGeneration.filter(
-														(n) => {
-															const kind =
-																this.IndexToKind[i as keyof typeof this.IndexToKind]
-															return n.kind === kind
-														},
-													)[0].count
-													return this.natured ? value.natured : value.natureless
-												})()}
+								// Gets the number of PokemonBreederKind of this selection
+								const value = this.currentNumberOfPokemonPerGeneration.filter(
+									(n) => {
+										const kind =
+											this.IndexToKind[i as keyof typeof this.IndexToKind]
+										return n.kind === kind
+									},
+								)[0].count
+								return this.natured ? value.natured : value.natureless
+							})()}
 											</strong>
 											1x31 IV in
 										</p>
-										<sl-select @sl-change=${(e:CustomEvent) => {
-											//@ts-ignore
-											const newVal = e.currentTarget?.value as PokemonIv
-											this.handleIvSelectChange(i, newVal)
-										}
-										} value=${iv.value}>
+										<sl-select @sl-change=${(e: CustomEvent) => {
+								//@ts-ignore
+								const newVal = e.currentTarget?.value as PokemonIv
+								this.handleIvSelectChange(i, newVal)
+							}
+							} value=${iv.value}>
 											${PokemonBreedTreeNode.default_ivs.map(
-												(iv) => html`
+								(iv) => html`
 													<sl-option value=${iv}>${pascalCaseToSpacedPascal(iv)}</sl-option>
 												`,
-											)}
+							)}
 										</sl-select>
 									</div>
 							  `
-							: null,
-					)}
+						: null,
+				)}
 				</div>
 			</div>
 		`
 	}
 }
-
-export { FinalPokemonNodeForm }

@@ -1,14 +1,14 @@
-import { TemplateResult, html } from 'lit'
+import { HTMLTemplateResult, html } from 'lit'
 import { config } from '../config'
 
-export function rootLayout(slot: TemplateResult) {
+export function layout(slot: HTMLTemplateResult) {
 	return html`<html lang="en">
 		<head>
 			<meta charset="UTF-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			<title>Pokemmo Breeding Helper</title>
 			<!-- Client bundle -->
-			<script src="/index.js" type="module"></script>
+			<script defer src="/index.js" type="module"></script>
 			<!-- Shoelace styles -->
 			<link
 				rel="stylesheet"

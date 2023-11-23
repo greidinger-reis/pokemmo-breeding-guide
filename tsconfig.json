@@ -20,7 +20,10 @@
 		"types": [
 			"bun-types" // add Bun global
 		],
-		"plugins": [{ "name": "ts-lit-plugin" }]
+		"plugins": [{ "name": "ts-lit-plugin" }],
+		"paths": {
+			"@/*": ["./src/*"]
+		}
 	},
 	"exclude": ["public"]
 }

@@ -1,124 +1,122 @@
-import fs from "node:fs"
-import csvParser from "csv-parser"
-import { EggType, IEggType, Pokemon } from "./types"
-import path from "node:path"
+import fs from 'node:fs'
+import csv from 'csv-parser'
+import { PokemonEggGroup, PokemonSpecies } from '@/client/pokemon'
+import path from 'path'
+import { None, Option, Some } from 'ts-results'
 
 const skippedPokemons = [
-    "Mega",
-    "Partner",
-    "Alolan",
-    "Galarian",
-    "Castform ",
-    "Wormadam Sandy Cloak",
-    "Wormadam Trash Cloak",
-    "Wash",
-    "Frost",
-    "Heat",
-    "Fan",
-    "Mow",
-    "Basculin Blue-Striped Form",
-    "Darmanitan Zen Mode",
+	'Mega',
+	'Partner',
+	'Alolan',
+	'Galarian',
+	'Castform ',
+	'Wormadam Sandy Cloak',
+	'Wormadam Trash Cloak',
+	'Wash',
+	'Frost',
+	'Heat',
+	'Fan',
+	'Mow',
+	'Basculin Blue-Striped Form',
+	'Darmanitan Zen Mode',
 ]
 
 const fixPokemonEggGroups = {
-    Nidorina: [EggType.Field, EggType.Monster],
-    Nidoqueen: [EggType.Field, EggType.Monster],
-    Rotom: [EggType.Genderless],
-    Magnemite: [EggType.Genderless],
-    Magneton: [EggType.Genderless],
-    Magnezone: [EggType.Genderless],
-    Staryu: [EggType.Genderless],
-    Starmie: [EggType.Genderless],
-    Bronzor: [EggType.Genderless],
-    Bronzong: [EggType.Genderless],
-    Solrock: [EggType.Genderless],
-    Lunatone: [EggType.Genderless],
-    Beldum: [EggType.Genderless],
-    Metang: [EggType.Genderless],
-    Metagross: [EggType.Genderless],
-    Baltoy: [EggType.Genderless],
-    Claydol: [EggType.Genderless],
-    Voltorb: [EggType.Genderless],
-    Electrode: [EggType.Genderless],
-    Porygon: [EggType.Genderless],
-    Porygon2: [EggType.Genderless],
-    "Porygon-Z": [EggType.Genderless],
-    Klink: [EggType.Genderless],
-    Klang: [EggType.Genderless],
-    Klinklang: [EggType.Genderless],
-    Cryogonal: [EggType.Genderless],
-    Golett: [EggType.Genderless],
-    Golurk: [EggType.Genderless],
+	Nidorina: [PokemonEggGroup.Field, Some(PokemonEggGroup.Monster)],
+	Nidoqueen: [PokemonEggGroup.Field, Some(PokemonEggGroup.Monster)],
+	Rotom: [PokemonEggGroup.Genderless],
+	Magnemite: [PokemonEggGroup.Genderless],
+	Magneton: [PokemonEggGroup.Genderless],
+	Magnezone: [PokemonEggGroup.Genderless],
+	Staryu: [PokemonEggGroup.Genderless],
+	Starmie: [PokemonEggGroup.Genderless],
+	Bronzor: [PokemonEggGroup.Genderless],
+	Bronzong: [PokemonEggGroup.Genderless],
+	Solrock: [PokemonEggGroup.Genderless],
+	Lunatone: [PokemonEggGroup.Genderless],
+	Beldum: [PokemonEggGroup.Genderless],
+	Metang: [PokemonEggGroup.Genderless],
+	Metagross: [PokemonEggGroup.Genderless],
+	Baltoy: [PokemonEggGroup.Genderless],
+	Claydol: [PokemonEggGroup.Genderless],
+	Voltorb: [PokemonEggGroup.Genderless],
+	Electrode: [PokemonEggGroup.Genderless],
+	Porygon: [PokemonEggGroup.Genderless],
+	Porygon2: [PokemonEggGroup.Genderless],
+	'Porygon-Z': [PokemonEggGroup.Genderless],
+	Klink: [PokemonEggGroup.Genderless],
+	Klang: [PokemonEggGroup.Genderless],
+	Klinklang: [PokemonEggGroup.Genderless],
+	Cryogonal: [PokemonEggGroup.Genderless],
+	Golett: [PokemonEggGroup.Genderless],
+	Golurk: [PokemonEggGroup.Genderless],
 } as const
 
-function parseEggType(eggType: string): IEggType | undefined {
-    switch (eggType) {
-        case "Water 1":
-            return EggType.WaterA
-        case "Water 2":
-            return EggType.WaterB
-        case "Water 3":
-            return EggType.WaterC
-        case "Undiscovered":
-            return EggType.CannotBreed
-        case "Human-Like":
-            return EggType.Humanoid
-        case "":
-            return undefined
-        default:
-            return eggType as IEggType
-    }
+function parseEggGroup(eggGroup: string): Option<PokemonEggGroup> {
+	switch (eggGroup) {
+		case 'Water 1':
+			return Some(PokemonEggGroup.WaterA)
+		case 'Water 2':
+			return Some(PokemonEggGroup.WaterB)
+		case 'Water 3':
+			return Some(PokemonEggGroup.WaterC)
+		case 'Undiscovered':
+			return Some(PokemonEggGroup.CannotBreed)
+		case 'Human-Like':
+			return Some(PokemonEggGroup.Humanoid)
+		case '':
+			return None
+		default:
+			return Some(eggGroup as PokemonEggGroup)
+	}
 }
 
 function parseName(name: string): string {
-    switch (name) {
-        case "Wormadam Plant Cloak":
-            return "Wormadam"
-        case "Basculin Red-Striped Form":
-            return "Basculin"
-        case "Darmanitan Standard Mode":
-            return "Darmanitan"
-        default:
-            return name
-    }
+	switch (name) {
+		case 'Wormadam Plant Cloak':
+			return 'Wormadam'
+		case 'Basculin Red-Striped Form':
+			return 'Basculin'
+		case 'Darmanitan Standard Mode':
+			return 'Darmanitan'
+		default:
+			return name
+	}
 }
 
-;(() => {
-    const pokemons: Array<Pokemon> = []
+const pokemons: Array<PokemonSpecies> = []
 
-    fs.createReadStream(path.resolve(__dirname, "pokemon_data.csv"), "utf8")
-        .pipe(
-            csvParser({
-                mapHeaders: ({ header }) => header.trim(),
-            }),
-        )
-        .on("data", (row) => {
-            if (skippedPokemons.some((name) => (row["name"] as string).startsWith(name))) {
-                return
-            }
+fs.createReadStream(path.resolve(import.meta.dir, 'pokemon_data.csv'), 'utf8')
+	.pipe(
+		csv({
+			mapHeaders: ({ header }) => header.trim(),
+		})
+	)
+	.on('data', (row) => {
+		if (skippedPokemons.some((name) => (row['name'] as string).startsWith(name))) {
+			return
+		}
+		const pokemon: PokemonSpecies = {
+			number: parseInt(row['pokedex_number']),
+			name: parseName(row['name']),
+			types: [row['type_1'], row['type_2'] ? Some(row['type_2']): None],
+			eggGroups: [parseEggGroup(row['egg_type_1']).unwrap(), parseEggGroup(row['egg_type_2'])],
+			percentageMale: parseFloat(row['percentage_male']),
+		}
 
-            const pokemon: Pokemon = {
-                pokedexNumber: parseInt(row["pokedex_number"]),
-                name: parseName(row["name"]),
-                types: [row["type_1"], row["type_2"]].filter(Boolean),
-                eggTypes: [parseEggType(row["egg_type_1"]), parseEggType(row["egg_type_2"])].filter(
-                    Boolean,
-                ) as Array<IEggType>,
-                percentageMale: parseFloat(row["percentage_male"]),
-            }
+		const fix = fixPokemonEggGroups[pokemon.name as keyof typeof fixPokemonEggGroups]
 
-            const fix = fixPokemonEggGroups[pokemon.name as keyof typeof fixPokemonEggGroups]
+		if (fix) {
+			//@ts-ignore
+			pokemon.eggGroups[0] = fix[0]
+			if (fix[1]) {
+				//@ts-ignore
+				pokemon.eggTypes[1] = fix[1]
+			}
+		}
 
-            if (fix) {
-                pokemon.eggTypes[0] = fix[0]
-                if (fix[1]) {
-                    pokemon.eggTypes[1] = fix[1]
-                }
-            }
-
-            pokemons.push(pokemon)
-        })
-        .on("end", () => {
-            fs.writeFileSync(path.resolve(__dirname, "data.json"), JSON.stringify(pokemons, null, 2))
-        })
-})()
+		pokemons.push(pokemon)
+	})
+	.on('end', () => {
+		fs.writeFileSync(path.resolve(import.meta.dir, 'data.json'), JSON.stringify(pokemons, null, 4))
+	})

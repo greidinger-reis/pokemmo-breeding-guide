@@ -81,7 +81,7 @@ export enum PokemonGender {
 	Genderless = 'Genderless',
 }
 
-export class Pokemon {
+export class PokemonSpecies {
 	constructor(
 		public number: number,
 		public name: string,
@@ -89,4 +89,9 @@ export class Pokemon {
 		public eggGroups: Readonly<[PokemonEggGroup, Option<PokemonEggGroup>]>,
 		public percentageMale: number,
 	) {}
+
+	static fromJson(data: string) {
+		
+
+	}
 }

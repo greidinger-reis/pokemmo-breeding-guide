@@ -1,27 +1,7 @@
 import fs from 'fs'
 import { minify } from 'csso'
-import { config } from './config'
+import { config } from '@/config'
 import minimist from 'minimist'
-
-function parseArgs(): [string, string, boolean] {
-	const argv = Bun.argv.slice(2)
-	const args = minimist(argv, {
-		boolean: 'watch',
-		default: {
-			watch: false,
-		},
-	})
-
-	let input = args['input'] as string | undefined
-	let output = args['output'] as string | undefined
-	let watch = args['watch'] as boolean
-
-	if (!input || !output) {
-		throw new Error('Usage: twlit --input <file> --output <file>')
-	}
-
-	return [input, output, watch]
-}
 
 class ClientBundler {
 	constructor(stylesInput: string, stylesOutput: string, devMode: boolean) {
@@ -29,10 +9,17 @@ class ClientBundler {
 		this.setupStyles(stylesInput, stylesOutput, devMode)
 	}
 
+	makePublicFolder() {
+		if (!fs.existsSync('public')) {
+			fs.mkdirSync('public')
+		}
+	}
+
 	async buildClient() {
 		const start = Date.now()
+		this.makePublicFolder()
 		await Bun.build({
-			entrypoints: ['src/client/index.ts'],
+			entrypoints: ['src/web/index.ts'],
 			outdir: 'public',
 			target: 'browser',
 			minify: config.env.NODE_ENV === 'production',
@@ -46,7 +33,7 @@ class ClientBundler {
 
 		if (dev) {
 			let reloadCount = 0
-			fs.watch('src/client/elements', { persistent: false }, async () => {
+			fs.watch('src/web/components', { persistent: false }, async () => {
 				reloadCount++
 				await this.buildClient()
 				await fetch('http://localhost:3001/restart')
@@ -77,8 +64,9 @@ class ClientBundler {
 			.catch(console.error)
 	}
 
-	async writeStylesForSSR(input:string) {
+	async writeStylesForSSR(input: string) {
 		const file = Bun.file(input)
+		this.makePublicFolder()
 		await Bun.write('public/styles.css', file)
 	}
 
@@ -96,4 +84,4 @@ class ClientBundler {
 	}
 }
 
-new ClientBundler(...parseArgs())
+new ClientBundler('./src/styles/input.css', './src/styles/output.js', config.env.NODE_ENV === 'development')
